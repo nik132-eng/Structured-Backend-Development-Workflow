@@ -58,3 +58,28 @@ This repository contains no executable code — only Markdown prompts, JSON conf
 2. If you changed a stage's input/output contract, update `ARCHITECTURE.md` and `prompts/MASTER-WORKFLOW.md` to match.
 3. If you changed an output format, update the relevant template in `templates/` and the worked example in `examples/`.
 4. Open a PR describing what changed and why — include a before/after if you changed prompt wording, since the impact of prompt changes isn't visible in a diff alone.
+
+## Healthcare Guidelines
+
+When contributing features or prompts that involve patient data:
+
+### HIPAA Compliance
+- All PHI (phone, email, SSN, DOB, address) must be encrypted at rest (AES-256)
+- Decryption only in service layer, never in controllers or responses
+- All access to PHI must be audit-logged with encrypted patient ID
+- Audit logs are immutable (6-year retention)
+
+### Code Patterns
+- Follow encryption patterns in [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
+- Use [`templates/healthcare-entity-template.md`](templates/healthcare-entity-template.md) for new entities with PHI
+- Review [`config/healthcare-rules.json`](config/healthcare-rules.json) for configuration
+
+### Testing
+- Security tests required: verify no plaintext PHI in logs or responses
+- Encryption roundtrip tests required for all encrypted fields
+- Audit trail verification tests required
+- 95%+ coverage target for code handling PHI
+
+### Compliance Checklist
+- Before submitting a PR that touches patient data, complete [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md)
+- Include checklist completion status in your PR description

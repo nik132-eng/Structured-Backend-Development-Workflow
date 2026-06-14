@@ -1,57 +1,116 @@
-# Backend Development Automation Workflow
+# Backend Development Automation Workflow for Healthcare
 
-A tool-agnostic, modular system for automating backend feature development using structured prompts and AI agents. The workflow takes a feature idea from a rough problem statement all the way through to reviewed, tested, working code — moving through eight well-defined stages with human checkpoints in between.
+Automated backend feature development for **clinic management, hospital systems, and healthcare platforms**.
 
-It is designed to work with any AI coding agent (Claude Code, Cursor, Copilot Workspace, etc.) and any backend stack (Node, Python, Ruby, Java, ...). The prompts are plain Markdown — read them, paste them, or wire them into your own automation.
+Designed for:
+- **Stack:** NestJS + TypeScript + PostgreSQL + Jest
+- **Domain:** Healthcare (Clinic/Hospital/Medical Device Management)
+- **Compliance:** HIPAA-ready (encryption, audit logs, access control)
+- **Sensitivity:** Patient data privacy (PHI handling, secure communication)
 
 ## Quick Start
 
-### Option A: Run the Master Workflow (recommended for new features)
+### For Healthcare Features:
+1. Read [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md) (healthcare rules your team follows)
+2. Open [`prompts/MASTER-WORKFLOW.md`](prompts/MASTER-WORKFLOW.md)
+3. Provide your feature problem statement
+4. Follow Stages 1-8 with healthcare considerations
 
-1. Open [`prompts/MASTER-WORKFLOW.md`](prompts/MASTER-WORKFLOW.md)
-2. Give your AI agent the master workflow prompt plus your problem statement
-3. Work through Stages 1–8 sequentially, approving each checkpoint as you go
+### Healthcare Checklist:
+Before building features that touch patient data:
+- [ ] Read [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md)
+- [ ] Follow patterns in [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
+- [ ] Review [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/)
+- [ ] Use templates in [`templates/healthcare-entity-template.md`](templates/healthcare-entity-template.md)
 
-### Option B: Run an Individual Stage
+## Healthcare Features
 
-If you already have output from a previous stage (e.g. you have a spike document and just need a task breakdown), jump straight to the relevant stage prompt in [`prompts/stages/`](prompts/stages/) and provide its required inputs.
+**Patient Data Encryption**
+- Phone/email encrypted at rest (AES-256)
+- Decryption only when necessary
+- Never logged in plaintext
 
-```text
-prompts/stages/01-SPIKE-DOCUMENT-GENERATOR.md   # Problem statement -> Spike document
-prompts/stages/02-TASK-BREAKDOWN.md             # Spike document -> Task list
-prompts/stages/03-CODEBASE-ANALYZER.md          # Task list -> Codebase analysis
-prompts/stages/04-PROMPT-GENERATOR.md           # Analysis -> Execution prompts
-prompts/stages/05-CODE-EXECUTOR.md              # Execution prompts -> Code
-prompts/stages/06-TEST-RUNNER.md                # Code -> Test results
-prompts/stages/07-SELF-VERIFIER.md              # Code + tests -> Verification report
-prompts/stages/08-BUSINESS-LOGIC-REVIEWER.md    # Everything -> Final approval
-```
+**HIPAA Audit Trail**
+- Every access to patient data logged
+- Logs immutable (never deleted)
+- Clinic admin reports available
 
-## Features
+**Secure Communication**
+- SMS/Email without exposing details
+- Encrypted tokens for links
+- Unsubscribe without authentication
 
-- **8-stage pipeline** covering spike, planning, analysis, prompt generation, execution, testing, self-verification, and human review
-- **Human checkpoints** at every stage with explicit approve / revise / go-back / pause controls
-- **Retry & escalation logic** for test failures, configurable via [`config/retry-limits.json`](config/retry-limits.json)
-- **Reusable templates** for every document the workflow produces
-- **Worked example** ([`examples/ecommerce-cart-example/`](examples/ecommerce-cart-example/)) showing the full pipeline end-to-end on a shopping cart feature
-- **Framework-aware test generation**, configurable via [`config/test-frameworks.json`](config/test-frameworks.json)
-- **Fully customizable** — every prompt, template, and config value can be adapted to your team's stack and conventions
+**Timezone Support**
+- Store times in UTC
+- Display in patient's timezone
+- Reminders at patient's local time
+
+## Example: Patient Appointment Reminders
+
+Complete healthcare feature example showing:
+- Problem statement -> Spike document -> Task breakdown
+- Codebase analysis with healthcare patterns
+- Execution prompts with HIPAA compliance
+- Generated code with encryption & audit logging
+- Full test coverage with security tests
+- Verification report flagging healthcare concerns
+- Business logic approval from clinic manager
+
+See [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/) for complete walkthrough.
+
+## Files
+
+### Documentation
+- [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md) - Healthcare development standards
+- [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md) - Compliance verification
+- [`docs/WORKFLOW-OVERVIEW.md`](docs/WORKFLOW-OVERVIEW.md) - Detailed stage-by-stage explanation
+- [`docs/WORKFLOW-DIAGRAM.md`](docs/WORKFLOW-DIAGRAM.md) - Full state machine diagram
+- [`docs/CHECKPOINT-GUIDE.md`](docs/CHECKPOINT-GUIDE.md) - What to check at each checkpoint
+- [`docs/MODULE-IDENTIFICATION.md`](docs/MODULE-IDENTIFICATION.md) - How to scope modules
+- [`docs/CUSTOMIZATION-GUIDE.md`](docs/CUSTOMIZATION-GUIDE.md) - Adapting the workflow
+
+### Templates
+- [`templates/healthcare-entity-template.md`](templates/healthcare-entity-template.md) - Entity creation guide
+- [`templates/SPIKE-DOCUMENT-TEMPLATE.md`](templates/SPIKE-DOCUMENT-TEMPLATE.md) - Spike document format
+- [`templates/TASK-BREAKDOWN-TEMPLATE.md`](templates/TASK-BREAKDOWN-TEMPLATE.md) - Task breakdown format
+- [`templates/CODEBASE-ANALYSIS-TEMPLATE.md`](templates/CODEBASE-ANALYSIS-TEMPLATE.md) - Analysis format
+- [`templates/PROMPT-TEMPLATE.md`](templates/PROMPT-TEMPLATE.md) - Prompt format
+- [`templates/CHECKPOINT-CHECKLIST.md`](templates/CHECKPOINT-CHECKLIST.md) - Checkpoint format
+
+### Configuration
+- [`config/healthcare-rules.json`](config/healthcare-rules.json) - Healthcare/HIPAA rules
+- [`config/retry-limits.json`](config/retry-limits.json) - Retry configuration
+- [`config/test-frameworks.json`](config/test-frameworks.json) - Test framework settings
+
+### Prompts
+- [`prompts/MASTER-WORKFLOW.md`](prompts/MASTER-WORKFLOW.md) - Full 8-stage workflow
+- [`prompts/stages/`](prompts/stages/) - Individual stage prompts
+
+### Examples
+- [`examples/ecommerce-cart-example/`](examples/ecommerce-cart-example/) - E-commerce cart walkthrough
+- [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/) - Healthcare appointment reminders walkthrough
 
 ## Architecture
 
 See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full state machine, stage dependency table, retry logic, and design rationale.
 
-## Examples
+## Team Onboarding
 
-See [`examples/ecommerce-cart-example/`](examples/ecommerce-cart-example/) for a complete, realistic walkthrough of the workflow applied to building a shopping cart feature — from problem statement to final verification.
+1. Read this file
+2. Review [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
+3. Study [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/)
+4. Try running a simple feature through the workflow
+5. Give feedback and iterate on prompts
 
-## Documentation
+## Customization
 
-- [`docs/WORKFLOW-OVERVIEW.md`](docs/WORKFLOW-OVERVIEW.md) — detailed stage-by-stage explanation
-- [`docs/WORKFLOW-DIAGRAM.md`](docs/WORKFLOW-DIAGRAM.md) — full state machine diagram
-- [`docs/CHECKPOINT-GUIDE.md`](docs/CHECKPOINT-GUIDE.md) — what to check at each checkpoint
-- [`docs/MODULE-IDENTIFICATION.md`](docs/MODULE-IDENTIFICATION.md) — how to scope modules in large codebases
-- [`docs/CUSTOMIZATION-GUIDE.md`](docs/CUSTOMIZATION-GUIDE.md) — adapting the workflow to your team
+All aspects customizable:
+- **Patterns:** Update [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
+- **Compliance:** Update [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md)
+- **Workflow:** Modify prompts in [`prompts/stages/`](prompts/stages/)
+- **Config:** Adjust [`config/`](config/) files
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to extend.
 
 ## Contributing
 

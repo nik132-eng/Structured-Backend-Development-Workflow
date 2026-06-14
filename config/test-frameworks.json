@@ -1,9 +1,17 @@
 {
+  "description": "Supported test frameworks and healthcare-specific test requirements",
   "supported_frameworks": [
     {
       "name": "jest",
       "language": "javascript",
-      "description": "JavaScript testing framework"
+      "description": "JavaScript testing framework",
+      "healthcare_requirements": {
+        "security_test_pattern": "it('should not log PHI in plaintext')",
+        "encryption_test_pattern": "it('should encrypt patient phone')",
+        "audit_test_pattern": "it('should create audit log for PHI access')",
+        "coverage_minimum": 85,
+        "coverage_for_phi": 95
+      }
     },
     {
       "name": "vitest",
@@ -35,5 +43,12 @@
       "language": "java",
       "description": "Java testing framework"
     }
-  ]
+  ],
+  "healthcare_test_requirements": {
+    "all_phi_reads_logged": true,
+    "all_phi_writes_logged": true,
+    "no_plaintext_in_logs": true,
+    "encryption_roundtrip_tested": true,
+    "audit_trail_verified": true
+  }
 }
