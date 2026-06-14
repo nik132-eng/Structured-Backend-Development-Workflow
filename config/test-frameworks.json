@@ -1,0 +1,39 @@
+{
+  "supported_frameworks": [
+    {
+      "name": "jest",
+      "language": "javascript",
+      "description": "JavaScript testing framework"
+    },
+    {
+      "name": "vitest",
+      "language": "javascript",
+      "description": "Vite-native testing framework"
+    },
+    {
+      "name": "mocha",
+      "language": "javascript",
+      "description": "JavaScript testing library"
+    },
+    {
+      "name": "pytest",
+      "language": "python",
+      "description": "Python testing framework"
+    },
+    {
+      "name": "unittest",
+      "language": "python",
+      "description": "Python built-in testing"
+    },
+    {
+      "name": "rspec",
+      "language": "ruby",
+      "description": "Ruby testing framework"
+    },
+    {
+      "name": "junit",
+      "language": "java",
+      "description": "Java testing framework"
+    }
+  ]
+}

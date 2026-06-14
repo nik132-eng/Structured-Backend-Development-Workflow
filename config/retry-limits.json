@@ -1,0 +1,8 @@
+{
+  "test_failure_retries": 5,
+  "test_failure_max_retries": 5,
+  "self_verification_retries": 3,
+  "escalation_threshold_test_failures": 5,
+  "escalation_strategy": "human",
+  "description": "Retry logic configuration. After max retries, escalate to human."
+}
