@@ -1,0 +1,15 @@
+{
+  "autoRun": {
+    "allow_instructions": [
+      "Read-only commands (ls, cat, grep, git status, git log, git diff) are always fine.",
+      "Running the project's own test, lint, typecheck, and build commands is always fine.",
+      "Package installs via the project's package manager (npm, pnpm, pip, cargo, go) are fine."
+    ],
+    "block_instructions": [
+      "Any git push to a default or shared branch (main, master, dev, pre-dev) must go through approval first.",
+      "Any command that deletes files tracked by git, resets git history, or force-pushes must go through approval first.",
+      "Any command that uses credentials, API tokens, or secrets must go through approval first.",
+      "Any command that modifies data in a database or calls a paid external service must go through approval first."
+    ]
+  }
+}

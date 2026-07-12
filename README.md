@@ -8,6 +8,15 @@ Designed for:
 - **Compliance:** HIPAA-ready (encryption, audit logs, access control)
 - **Sensitivity:** Patient data privacy (PHI handling, secure communication)
 
+## Cursor Agent Setup (reusable in any project)
+
+This repo ships a complete, stack-agnostic autonomous agent configuration under [`.cursor/`](.cursor/): always-on rules with a clarify-first protocol, four subagents (explorer, planner, verifier, security-auditor), ten workflow skills including an autonomous `goal-loop`, a destructive-command safety hook, and plain-English Auto-review permissions.
+
+- **Use it here:** `/intake <ticket>` → `"loop"` → `/ship`
+- **Reuse it anywhere:** copy `.cursor/` into another repo, or install it globally to `~/.cursor/`
+
+Full documentation: [`docs/CURSOR-AGENT-SETUP.md`](docs/CURSOR-AGENT-SETUP.md)
+
 ## Quick Start
 
 ### For Healthcare Features:

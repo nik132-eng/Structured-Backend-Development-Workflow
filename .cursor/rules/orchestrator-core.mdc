@@ -1,0 +1,64 @@
+---
+description: Universal autonomous-agent operating protocol — triage, clarify-first, delegation, safety gates.
+alwaysApply: true
+---
+
+# Orchestrator Core
+
+## Triage first
+
+Classify every task before acting:
+
+- **Trivial** (one file, no new behavior, no security/UI impact): just do it. No docs, no ceremony.
+- **Non-trivial** (anything else): follow the loop — `problem-intake` → plan → iterate implement/verify → `regression-check` → `pr-prep`. Task artifacts go in `docs/agent-tasks/YYYY-MM-DD_short-name/` (create the folder if missing).
+
+When the user says "loop" or asks to iterate until done, use the `goal-loop` skill.
+
+## Clarify-first protocol
+
+Before starting a non-trivial task, check the request against this list. If any answer is unknown AND would change what you build, ask — otherwise proceed with stated assumptions.
+
+1. **Outcome**: what observable behavior counts as done?
+2. **Scope**: which part of the system, and what is explicitly out of scope?
+3. **Constraints**: stack, style, backwards-compatibility, performance, deadline pressure (quick hack vs. proper fix)?
+4. **Irreversibles**: does the task involve data migration, deletion, external services, or spending money?
+
+Rules for asking:
+
+- Batch ALL questions into one structured multiple-choice prompt (AskQuestion) at the start — never drip-feed questions mid-task.
+- Every question must be blocking: skip anything you can infer from the codebase or resolve with a sensible default.
+- When you proceed on an assumption, state it in one line in the brief so the user can veto it.
+- Mid-task, stop to ask only for the approval gates below or a genuine scope change.
+
+## Adapt to the project
+
+Never assume a stack. On the first non-trivial task in a repo, detect:
+
+- **Commands**: read `package.json` scripts, `Makefile`, `pyproject.toml`, `Cargo.toml`, `go.mod`, CI config — find the real test/lint/build/format commands and use those.
+- **Conventions**: read the project's `AGENTS.md`, `.cursor/rules/`, `CONTRIBUTING.md` if present.
+- **Base branch**: infer from `git remote show origin` (HEAD branch) or existing PR conventions; don't assume `main`.
+
+## Context discipline
+
+- Delegate broad codebase searches to the `codebase-explorer` subagent or Explore; keep raw search output out of the main context.
+- Summarize long logs; never paste them. Prefer file references over copying content.
+- Keep any docs you write concise and implementation-oriented.
+
+## Delegation
+
+- `planner` subagent: spikes and implementation plans for complex or ambiguous work.
+- `verifier` subagent: independent post-implementation validation before declaring done.
+- `security-auditor` subagent: touched-scope review when auth, input handling, storage, network, uploads, or privacy boundaries change.
+- Browser tool: verify frontend changes visually; save screenshots as evidence.
+
+## Approval gates — always stop and ask before
+
+- using credentials, tokens, or secrets
+- configuring or calling paid/external services
+- destructive commands (reset, force push, dropping data, rm of tracked files)
+- opening, updating, or merging a PR; pushing to shared branches
+- installing marketplace skills or third-party tools
+
+## Learnings
+
+After a task with a wrong assumption, repeated failure, or user correction, append one short entry to `.learnings/LEARNINGS.md` (or `.learnings/ERRORS.md` for bugs in our process). One concept per entry. Promote to AGENTS.md only if it applies to most future tasks.
