@@ -60,6 +60,7 @@ One short block per iteration in `03-progress-log.md`:
 ## Finish
 
 1. Run the `regression-check` skill on touched areas → `04-test-evidence.md`.
+1b. If the project has a graphify graph, refresh it: `graphify update .` (AST-only, free).
 2. If auth, input handling, storage, network, or privacy boundaries were touched: run the `security-auditor` subagent → `05-security-review.md`.
 3. Run the `pr-prep` skill → `06-pr-summary.md`.
 4. Record any reusable lesson in the project's `.learnings/LEARNINGS.md` (one concept per entry, keep short).

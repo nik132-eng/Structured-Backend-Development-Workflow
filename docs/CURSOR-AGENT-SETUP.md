@@ -34,6 +34,14 @@ The `goal-loop` skill drives iteration autonomously: it diagnoses each failure b
 
 For tasks with many subtasks or overnight runs, the `ralph-loop` skill applies the Ralph pattern (fresh context every iteration, filesystem + git as the only memory): each iteration runs in a fresh-context subagent that reads the brief/plan/progress files, completes exactly one subtask, verifies it, updates the files, and returns a one-line result. The orchestrator only checks exit criteria between iterations. It refuses to start without machine-verifiable acceptance criteria — subjective goals fail this pattern.
 
+### Learning loop (self-improvement)
+
+After every non-trivial task the agent closes the loop instead of losing knowledge with the chat: one-line lessons go to `.learnings/LEARNINGS.md`; a procedure done twice gets promoted into a skill (and a skill that misled the agent gets fixed on the spot); durable cross-project facts go to a memory MCP server when one is available; and at task start the agent checks `.learnings/`, past task folders, and memory before re-deriving anything.
+
+### Graph-first code understanding (token efficiency)
+
+If the `graphify` CLI is installed, the agent answers structural questions from the project's knowledge graph (`graphify query/explain/path`, ~2k tokens) instead of re-reading files. In a code repo without a graph it bootstraps one for free with `graphify update .` (AST-only, no LLM), and refreshes it after implementation in the goal-loop finish step. Docs-only corpora need the full semantic pipeline (costs tokens), which is opt-in.
+
 ### AGENTS.md authoring
 
 The `agents-md` skill encodes the evidence-based "Toolchain First" practice (ETH Zurich, Feb 2026: LLM-generated context files *reduced* agent success in 5 of 8 settings and added 20%+ cost): keep AGENTS.md under ~40 lines of genuinely non-obvious content — exact commands, invariants no linter enforces, files never to touch — and delete anything the toolchain or README already covers.

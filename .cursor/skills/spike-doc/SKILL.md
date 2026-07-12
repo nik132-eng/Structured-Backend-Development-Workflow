@@ -10,7 +10,8 @@ Create `01-spike.md` in the current task folder.
 Before writing, analyze the existing implementation:
 
 - Use the `codebase-explorer` subagent (or Explore) for broad searches; keep raw search results out of the main context.
-- Skim architecture docs (`ARCHITECTURE.md`, `AGENTS.md`, `docs/`, graph reports) for structure before reading raw files.
+- Graph first: if `graphify-out/` exists, use `graphify query`/`explain`/`path` and `GRAPH_REPORT.md` for structure before reading raw files; in a code repo without a graph, bootstrap one free with `graphify update .` (AST-only).
+- Skim architecture docs (`ARCHITECTURE.md`, `AGENTS.md`, `docs/`) for anything the graph doesn't cover.
 - Reuse existing patterns, helpers, and abstractions before inventing new ones.
 
 Structure (keep each section short, file-oriented, no narrative essays):

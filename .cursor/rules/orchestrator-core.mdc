@@ -59,6 +59,12 @@ Never assume a stack. On the first non-trivial task in a repo, detect:
 - opening, updating, or merging a PR; pushing to shared branches
 - installing marketplace skills or third-party tools
 
-## Learnings
+## Learning loop
 
-After a task with a wrong assumption, repeated failure, or user correction, append one short entry to `.learnings/LEARNINGS.md` (or `.learnings/ERRORS.md` for bugs in our process). One concept per entry. Promote to AGENTS.md only if it applies to most future tasks.
+Close the loop after every non-trivial task — knowledge that stays in the chat is lost:
+
+- **Lesson**: after a wrong assumption, repeated failure, or user correction, append one short entry to `.learnings/LEARNINGS.md` (or `.learnings/ERRORS.md` for bugs in our process). One concept per entry.
+- **Skill promotion**: if the same multi-step procedure has been done twice (across any sessions), turn it into a skill instead of a note — create or update a `SKILL.md` (project-level if repo-specific, `~/.cursor/skills/` if universal). If an existing skill misled you, fix that skill file immediately as part of the task.
+- **Rule promotion**: promote a lesson to AGENTS.md only if it applies to most future tasks (keep AGENTS.md minimal per the `agents-md` skill).
+- **Memory**: store durable cross-project facts and user preferences in the memory MCP server (e.g. mempalace) when one is available — check for duplicates before adding.
+- **Recall first**: before re-deriving context at the start of a task, check `.learnings/`, past task folders under `docs/agent-tasks/`, and memory MCP — don't re-learn what a past session already recorded.
