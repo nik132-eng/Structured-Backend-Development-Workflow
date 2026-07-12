@@ -14,6 +14,8 @@ Classify every task before acting:
 
 When the user says "loop" or asks to iterate until done, use the `goal-loop` skill.
 
+**Skill gap check**: during setup of a non-trivial task, if no installed skill covers a well-known domain the task needs (framework best practices, vendor API, workflow pattern), run the `skill-discovery` skill — search the ecosystem, vet the candidate, and propose it. Installation stays behind the approval gate below; prefer one-shot `npx skills use` for one-off needs.
+
 ## Clarify-first protocol
 
 Before starting a non-trivial task, check the request against this list. If any answer is unknown AND would change what you build, ask — otherwise proceed with stated assumptions.

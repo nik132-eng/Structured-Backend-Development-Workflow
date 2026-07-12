@@ -23,7 +23,7 @@ That's the whole workflow for most tasks. Trivial one-file fixes skip all ceremo
 | --- | --- |
 | 4 always-on rules | Triage + clarify-first protocol, git discipline, model routing, security review policy |
 | 8 subagents | `project-manager` coordinating `engineer`, `qa`, `uiux-reviewer`, `codebase-explorer`, `planner`, `verifier`, `security-auditor` |
-| 12 skills | `goal-loop`, `ralph-loop` (long-horizon fresh-context runs), `problem-intake`, `spike-doc`, `task-implementation-doc`, `regression-check`, `pr-prep`, `agents-md`, plus `/intake` `/clarify` `/ship` `/status` |
+| 13 skills | `goal-loop`, `ralph-loop` (long-horizon fresh-context runs), `problem-intake`, `spike-doc`, `task-implementation-doc`, `regression-check`, `pr-prep`, `agents-md`, `skill-discovery` (auto-finds ecosystem skills when a task needs them), plus `/intake` `/clarify` `/ship` `/status` |
 | Safety layer | Destructive-command hook (`rm -rf`, force push, `DROP TABLE`, …) + plain-English Auto-review permissions |
 | Learning loop | `.learnings/STATE.md` five-stage memory (verified facts → general rules), skills that accumulate failure modes, memory-MCP integration |
 

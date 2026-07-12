@@ -182,6 +182,17 @@ how does a reminder go from cron trigger to SMS send?
 
 Free (AST-only) in code repos; the agent uses `graphify query/explain/path` for structural questions afterward instead of re-reading files.
 
+### Find a skill for an unfamiliar task
+
+Best use case: the task involves a framework, vendor API, or workflow pattern the agent would otherwise improvise. Discovery is automatic during task setup, but you can force it:
+
+```text
+Find a skill for Remotion video rendering best practices before we start —
+vet it and tell me source + installs before installing anything.
+```
+
+The agent searches skills.sh (`npx skills find`), reads the candidate's SKILL.md for red flags, and proposes it with source and install count. Installs always wait for your yes; for one-off needs it prefers `npx skills use <owner/repo>@<skill>` which applies the skill without installing.
+
 ### Teach the system something permanent
 
 ```text

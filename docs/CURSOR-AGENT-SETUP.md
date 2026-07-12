@@ -11,7 +11,7 @@ A reusable, autonomous Cursor agent configuration. Everything lives under `.curs
 | `rules/security-review.mdc` | When and how to trigger a touched-scope security review |
 | `rules/model-routing.mdc` | Token-aware routing: every delegated task goes to the cheapest model tier that does it well |
 | `agents/` | Eight subagents (see the role hierarchy below) |
-| `skills/` | Eight workflow skills + four slash-command skills (see below) |
+| `skills/` | Nine workflow skills + four slash-command skills (see below), incl. `skill-discovery` for auto-finding ecosystem skills (skills.sh) when a task needs know-how no installed skill covers — install stays behind the approval gate |
 | `hooks.json` + `hooks/guard-destructive.sh` | Safety hook: flags destructive shell commands (`rm -rf`, force push, hard reset, `DROP TABLE`, `terraform destroy`, …) for explicit approval before they run |
 | `permissions.json` | Plain-English Auto-review policy: auto-allow read-only/test/lint/build commands, force approval for pushes to shared branches, credential use, and data-destructive operations |
 
