@@ -1,130 +1,51 @@
-# Backend Development Automation Workflow for Healthcare
+# Cursor Agent Workflow
 
-Automated backend feature development for **clinic management, hospital systems, and healthcare platforms**.
+A reusable, self-improving Cursor agent setup. Drop it into any repo (or install it globally) and get a full agent team — project manager, planner, engineer, QA, UI/UX reviewer, verifier, security auditor — with autonomous loops, token-aware model routing, compounding memory, and hard safety gates.
 
-Designed for:
-- **Stack:** NestJS + TypeScript + PostgreSQL + Jest
-- **Domain:** Healthcare (Clinic/Hospital/Medical Device Management)
-- **Compliance:** HIPAA-ready (encryption, audit logs, access control)
-- **Sensitivity:** Patient data privacy (PHI handling, secure communication)
+Stack-agnostic by design: the agents detect each project's real test/lint/build commands and base branch instead of assuming one.
 
-## Cursor Agent Setup (reusable in any project)
+## Quick start
 
-This repo ships a complete, stack-agnostic autonomous agent configuration under [`.cursor/`](.cursor/): always-on rules with a clarify-first protocol, four subagents (explorer, planner, verifier, security-auditor), ten workflow skills including an autonomous `goal-loop`, a destructive-command safety hook, and plain-English Auto-review permissions.
+```text
+/intake  <paste a ticket, bug report, or one-line idea>
+   → review the brief, answer any batched questions
+loop
+   → the agent branches, plans, and iterates until acceptance criteria pass
+/ship
+   → verification evidence + PR summary; stops for your approval
+```
 
-- **Use it here:** `/intake <ticket>` → `"loop"` → `/ship`
-- **Reuse it anywhere:** copy `.cursor/` into another repo, or install it globally to `~/.cursor/`
+That's the whole workflow for most tasks. Trivial one-file fixes skip all ceremony — just ask.
 
-Full documentation: [`docs/CURSOR-AGENT-SETUP.md`](docs/CURSOR-AGENT-SETUP.md)
+## What's inside
 
-## Quick Start
+| Piece | What it gives you |
+| --- | --- |
+| 4 always-on rules | Triage + clarify-first protocol, git discipline, model routing, security review policy |
+| 8 subagents | `project-manager` coordinating `engineer`, `qa`, `uiux-reviewer`, `codebase-explorer`, `planner`, `verifier`, `security-auditor` |
+| 12 skills | `goal-loop`, `ralph-loop` (long-horizon fresh-context runs), `problem-intake`, `spike-doc`, `task-implementation-doc`, `regression-check`, `pr-prep`, `agents-md`, plus `/intake` `/clarify` `/ship` `/status` |
+| Safety layer | Destructive-command hook (`rm -rf`, force push, `DROP TABLE`, …) + plain-English Auto-review permissions |
+| Learning loop | `.learnings/STATE.md` five-stage memory (verified facts → general rules), skills that accumulate failure modes, memory-MCP integration |
 
-### For Healthcare Features:
-1. Read [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md) (healthcare rules your team follows)
-2. Open [`prompts/MASTER-WORKFLOW.md`](prompts/MASTER-WORKFLOW.md)
-3. Provide your feature problem statement
-4. Follow Stages 1-8 with healthcare considerations
+## Documentation
 
-### Healthcare Checklist:
-Before building features that touch patient data:
-- [ ] Read [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md)
-- [ ] Follow patterns in [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
-- [ ] Review [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/)
-- [ ] Use templates in [`templates/healthcare-entity-template.md`](templates/healthcare-entity-template.md)
+- **[docs/USAGE-EXAMPLES.md](docs/USAGE-EXAMPLES.md)** — copy-paste prompts and the best use case for every agent and skill. Start here.
+- **[docs/CURSOR-AGENT-SETUP.md](docs/CURSOR-AGENT-SETUP.md)** — full reference: architecture, workflow artifacts, role hierarchy, model routing, reuse instructions.
 
-## Healthcare Features
+## Install
 
-**Patient Data Encryption**
-- Phone/email encrypted at rest (AES-256)
-- Decryption only when necessary
-- Never logged in plaintext
+**Into one project:**
 
-**HIPAA Audit Trail**
-- Every access to patient data logged
-- Logs immutable (never deleted)
-- Clinic admin reports available
+```bash
+cp -R .cursor /path/to/your-repo/.cursor
+```
 
-**Secure Communication**
-- SMS/Email without exposing details
-- Encrypted tokens for links
-- Unsubscribe without authentication
+**Globally (every project, zero per-repo setup):** see the install section in [docs/CURSOR-AGENT-SETUP.md](docs/CURSOR-AGENT-SETUP.md). Restart Cursor afterward so hooks and permissions load. Requires `jq` (`brew install jq`).
 
-**Timezone Support**
-- Store times in UTC
-- Display in patient's timezone
-- Reminders at patient's local time
+## Specializing for a domain
 
-## Example: Patient Appointment Reminders
-
-Complete healthcare feature example showing:
-- Problem statement -> Spike document -> Task breakdown
-- Codebase analysis with healthcare patterns
-- Execution prompts with HIPAA compliance
-- Generated code with encryption & audit logging
-- Full test coverage with security tests
-- Verification report flagging healthcare concerns
-- Business logic approval from clinic manager
-
-See [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/) for complete walkthrough.
-
-## Files
-
-### Documentation
-- [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md) - Healthcare development standards
-- [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md) - Compliance verification
-- [`docs/WORKFLOW-OVERVIEW.md`](docs/WORKFLOW-OVERVIEW.md) - Detailed stage-by-stage explanation
-- [`docs/WORKFLOW-DIAGRAM.md`](docs/WORKFLOW-DIAGRAM.md) - Full state machine diagram
-- [`docs/CHECKPOINT-GUIDE.md`](docs/CHECKPOINT-GUIDE.md) - What to check at each checkpoint
-- [`docs/MODULE-IDENTIFICATION.md`](docs/MODULE-IDENTIFICATION.md) - How to scope modules
-- [`docs/CUSTOMIZATION-GUIDE.md`](docs/CUSTOMIZATION-GUIDE.md) - Adapting the workflow
-
-### Templates
-- [`templates/healthcare-entity-template.md`](templates/healthcare-entity-template.md) - Entity creation guide
-- [`templates/SPIKE-DOCUMENT-TEMPLATE.md`](templates/SPIKE-DOCUMENT-TEMPLATE.md) - Spike document format
-- [`templates/TASK-BREAKDOWN-TEMPLATE.md`](templates/TASK-BREAKDOWN-TEMPLATE.md) - Task breakdown format
-- [`templates/CODEBASE-ANALYSIS-TEMPLATE.md`](templates/CODEBASE-ANALYSIS-TEMPLATE.md) - Analysis format
-- [`templates/PROMPT-TEMPLATE.md`](templates/PROMPT-TEMPLATE.md) - Prompt format
-- [`templates/CHECKPOINT-CHECKLIST.md`](templates/CHECKPOINT-CHECKLIST.md) - Checkpoint format
-
-### Configuration
-- [`config/healthcare-rules.json`](config/healthcare-rules.json) - Healthcare/HIPAA rules
-- [`config/retry-limits.json`](config/retry-limits.json) - Retry configuration
-- [`config/test-frameworks.json`](config/test-frameworks.json) - Test framework settings
-
-### Prompts
-- [`prompts/MASTER-WORKFLOW.md`](prompts/MASTER-WORKFLOW.md) - Full 8-stage workflow
-- [`prompts/stages/`](prompts/stages/) - Individual stage prompts
-
-### Examples
-- [`examples/ecommerce-cart-example/`](examples/ecommerce-cart-example/) - E-commerce cart walkthrough
-- [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/) - Healthcare appointment reminders walkthrough
-
-## Architecture
-
-See [`ARCHITECTURE.md`](ARCHITECTURE.md) for the full state machine, stage dependency table, retry logic, and design rationale.
-
-## Team Onboarding
-
-1. Read this file
-2. Review [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
-3. Study [`examples/healthcare-appointment-reminders/`](examples/healthcare-appointment-reminders/)
-4. Try running a simple feature through the workflow
-5. Give feedback and iterate on prompts
-
-## Customization
-
-All aspects customizable:
-- **Patterns:** Update [`docs/HEALTHCARE-PATTERNS.md`](docs/HEALTHCARE-PATTERNS.md)
-- **Compliance:** Update [`docs/HIPAA-COMPLIANCE-CHECKLIST.md`](docs/HIPAA-COMPLIANCE-CHECKLIST.md)
-- **Workflow:** Modify prompts in [`prompts/stages/`](prompts/stages/)
-- **Config:** Adjust [`config/`](config/) files
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to extend.
-
-## Contributing
-
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for how to add stages, customize prompts, and contribute changes.
+The setup is generic; domain knowledge plugs in via the project's own `AGENTS.md` and rules. Example: for healthcare work, [docs/HEALTHCARE-PATTERNS.md](docs/HEALTHCARE-PATTERNS.md) and [docs/HIPAA-COMPLIANCE-CHECKLIST.md](docs/HIPAA-COMPLIANCE-CHECKLIST.md) hold the PHI/HIPAA invariants — the `security-auditor` and `planner` agents read project rules automatically and treat violations as critical.
 
 ## License
 
-Released under the [MIT License](LICENSE).
+MIT — see [LICENSE](LICENSE).
