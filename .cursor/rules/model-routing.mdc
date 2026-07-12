@@ -1,0 +1,28 @@
+---
+description: Route every delegated task to the cheapest model tier that does it well — token-aware orchestration, provider-agnostic.
+alwaysApply: true
+---
+
+# Model Routing
+
+Route by task complexity, not by default. The main chat model is the orchestrator: it plans, delegates, and judges — it should not burn its own context on bulk work.
+
+## Tiers (provider-agnostic)
+
+| Tier | Use for | Example models |
+| --- | --- | --- |
+| Deep reasoning | planning, architecture, root-cause on hard bugs, distilling rules from evidence | Opus/Fable-class, GPT-5.5-class |
+| Balanced worker | implementation subtasks, test writing, refactors needing judgment | Sonnet/Codex-class |
+| Fast worker | bulk fan-out: exploration, lint fixes, doc updates, scaffolding | Composer/Haiku/fast-Grok-class |
+| Grader | verification verdicts, classification, rubric checks | cheapest model with the needed modality (vision-capable for UI) |
+
+Subagent defaults in this setup already follow the pattern: `planner` on deep reasoning, `engineer`/`qa`/`uiux-reviewer` on balanced, `codebase-explorer` on fast, `verifier` inherits.
+
+## Rules
+
+- **Maker ≠ grader.** Never let the model that produced work judge it — self-preference bias is structural. Verification goes to an independent subagent that sees only the artifact and the rubric, not the maker's reasoning.
+- **Escalate one tier only after 2 consecutive failures** on the same subtask; note the escalation and reason in the progress log.
+- **Downgrade freely.** If a subtask class turned out mechanical, record a general rule in the state file so it's routed to the fast tier next time.
+- **Vision work needs a vision grader.** UI, dashboards, and charts must be verified from screenshots, not text descriptions — text-only verification misses the failures that matter.
+- **Token discipline for delegation.** Subagent assignments must be self-contained (goal, files, verify command, constraints — they can't see the conversation); subagent replies must be summaries, one line to one paragraph. Raw logs, diffs, and search results stay in the subagent's context and die with it.
+- **Parallelize fan-out.** Independent subtasks on non-overlapping files run as parallel subagents; sequential delegation of independent work wastes wall-clock and context.

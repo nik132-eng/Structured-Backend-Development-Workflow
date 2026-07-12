@@ -9,7 +9,7 @@ Run the whole loop in one turn. Do not stop between iterations to ask "shall I c
 
 ## Setup (once, before iteration 1)
 
-1. Normalize the goal with the `problem-intake` skill → `00-problem-brief.md`. The acceptance criteria in that brief are the loop's exit test. If the goal is one sentence, write criteria yourself from context; ask the user only for genuinely blocking unknowns — batched, once, up front.
+1. Consult memory first: read `.learnings/STATE.md` (verified facts and general rules) so the loop doesn't re-derive or re-fail on known ground. Then normalize the goal with the `problem-intake` skill → `00-problem-brief.md`. The acceptance criteria in that brief are the loop's exit test. If the goal is one sentence, write criteria yourself from context; ask the user only for genuinely blocking unknowns — batched, once, up front.
 2. Detect the project's toolchain: real test/lint/build commands from `package.json` scripts, `Makefile`, `pyproject.toml`, CI config. Record them in the brief. Never guess commands.
 3. If non-trivial (more than one file, new behavior, UI, security, or unclear requirements): run the `planner` subagent → `01-spike.md` and `02-implementation-plan.md` (see `spike-doc` and `task-implementation-doc` skills).
 4. Git: check `git status`; confirm with user if the tree is dirty. Find the base branch (project rules, or `git remote show origin` HEAD). Branch as `cursor/<ticket-or-feature>/<short-slug>`. Never implement directly on the base branch.
@@ -34,7 +34,7 @@ Repeat THINK → IMPLEMENT → VERIFY → DECIDE.
 **VERIFY**
 
 - Narrowest check first: the specific test file(s) for touched code, then lint, then build only when imports/config/types changed broadly — all using the detected toolchain commands.
-- For UI changes, use Browser verification and save screenshots to the task folder.
+- For UI changes, dispatch the `uiux-reviewer` subagent: it screenshots the affected screens and compares them against the goal, design system, and previous screenshots — never mark a visual criterion done from code review alone.
 - Never paste long logs into the conversation; summarize failures in the progress log.
 
 **DECIDE**
@@ -63,7 +63,7 @@ One short block per iteration in `03-progress-log.md`:
 1b. If the project has a graphify graph, refresh it: `graphify update .` (AST-only, free).
 2. If auth, input handling, storage, network, or privacy boundaries were touched: run the `security-auditor` subagent → `05-security-review.md`.
 3. Run the `pr-prep` skill → `06-pr-summary.md`.
-4. Record any reusable lesson in the project's `.learnings/LEARNINGS.md` (one concept per entry, keep short).
+4. Update the project's `.learnings/STATE.md`: new verified facts, general rules distilled from this task, remaining open failures, and the Last session pointer. Promote any twice-used procedure into a skill.
 5. STOP for user confirmation before opening or updating a PR.
 
 ## Artifacts

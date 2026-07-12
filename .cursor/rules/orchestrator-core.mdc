@@ -46,10 +46,15 @@ Never assume a stack. On the first non-trivial task in a repo, detect:
 
 ## Delegation
 
+Route models per the model-routing rule (cheapest tier that does the job well; maker ≠ grader).
+
+- `project-manager` subagent: coordinates multi-workstream tasks — decomposes the plan and dispatches the role agents below in parallel.
 - `planner` subagent: spikes and implementation plans for complex or ambiguous work.
+- `engineer` subagent: one well-scoped implementation subtask per dispatch.
+- `qa` subagent: test evidence — failing tests for bugs, red-green tests for new behavior.
 - `verifier` subagent: independent post-implementation validation before declaring done.
+- `uiux-reviewer` subagent: vision-based screenshot verification for any UI change — never approve visual work from text alone.
 - `security-auditor` subagent: touched-scope review when auth, input handling, storage, network, uploads, or privacy boundaries change.
-- Browser tool: verify frontend changes visually; save screenshots as evidence.
 
 ## Approval gates — always stop and ask before
 
@@ -61,10 +66,20 @@ Never assume a stack. On the first non-trivial task in a repo, detect:
 
 ## Learning loop
 
-Close the loop after every non-trivial task — knowledge that stays in the chat is lost:
+Close the loop after every non-trivial task — knowledge that stays in the chat is lost.
 
-- **Lesson**: after a wrong assumption, repeated failure, or user correction, append one short entry to `.learnings/LEARNINGS.md` (or `.learnings/ERRORS.md` for bugs in our process). One concept per entry.
-- **Skill promotion**: if the same multi-step procedure has been done twice (across any sessions), turn it into a skill instead of a note — create or update a `SKILL.md` (project-level if repo-specific, `~/.cursor/skills/` if universal). If an existing skill misled you, fix that skill file immediately as part of the task.
-- **Rule promotion**: promote a lesson to AGENTS.md only if it applies to most future tasks (keep AGENTS.md minimal per the `agents-md` skill).
-- **Memory**: store durable cross-project facts and user preferences in the memory MCP server (e.g. mempalace) when one is available — check for duplicates before adding.
-- **Recall first**: before re-deriving context at the start of a task, check `.learnings/`, past task folders under `docs/agent-tasks/`, and memory MCP — don't re-learn what a past session already recorded.
+**State file** — the project's memory lives in `.learnings/STATE.md` with five sections that mirror the memory progression (fail → investigate → verify → distill → consult):
+
+- `## Verified facts` — things checked with a command or read from source; stop guessing about these
+- `## General rules` — distilled rules that apply beyond one case; consult before re-deriving
+- `## Open failures` — failures documented with enough detail to investigate next session
+- `## Lessons learned` — process lessons, one concept per entry
+- `## Last session` — date, what was tried, what passed/failed, and the concrete next step
+
+Two operational rules decide whether this compounds or just grows: **read it at session start** (with past task folders and memory MCP) before re-deriving anything, and **write it before ending** every non-trivial session. Promote entries upward: an open failure becomes a verified fact once checked, a verified fact becomes a general rule when it generalizes.
+
+**Promotion targets:**
+
+- **Skill**: a multi-step procedure done twice becomes a `SKILL.md` (project-level if repo-specific, `~/.cursor/skills/` if universal). Add known failure modes and anti-patterns to existing skills after real incidents; if a skill misled you, fix it immediately as part of the task.
+- **AGENTS.md**: only rules that apply to most future tasks (keep it minimal per the `agents-md` skill).
+- **Memory MCP** (e.g. mempalace): durable cross-project facts and user preferences — check for duplicates before adding.

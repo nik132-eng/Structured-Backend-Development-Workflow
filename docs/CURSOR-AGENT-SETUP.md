@@ -5,11 +5,12 @@ A reusable, autonomous Cursor agent configuration. Everything lives under `.curs
 ## What's inside `.cursor/`
 
 | Path | What it does |
-|---|---|
+| --- | --- |
 | `rules/orchestrator-core.mdc` | Always-on operating protocol: triage (trivial vs. non-trivial), clarify-first questioning, delegation, approval gates |
 | `rules/git-workflow.mdc` | Branch discipline: detect base branch, never implement on it, safe git operations |
 | `rules/security-review.mdc` | When and how to trigger a touched-scope security review |
-| `agents/` | Four subagents: `codebase-explorer` (fast, read-only search), `planner` (spikes + plans, never codes), `verifier` (independent PR-ready verdict), `security-auditor` (touched-scope audit, incl. leak check on task docs) |
+| `rules/model-routing.mdc` | Token-aware routing: every delegated task goes to the cheapest model tier that does it well |
+| `agents/` | Eight subagents (see the role hierarchy below) |
 | `skills/` | Eight workflow skills + four slash-command skills (see below) |
 | `hooks.json` + `hooks/guard-destructive.sh` | Safety hook: flags destructive shell commands (`rm -rf`, force push, hard reset, `DROP TABLE`, `terraform destroy`, …) for explicit approval before they run |
 | `permissions.json` | Plain-English Auto-review policy: auto-allow read-only/test/lint/build commands, force approval for pushes to shared branches, credential use, and data-destructive operations |
@@ -18,7 +19,7 @@ A reusable, autonomous Cursor agent configuration. Everything lives under `.curs
 
 Non-trivial tasks run through a documented loop. Artifacts go in `docs/agent-tasks/YYYY-MM-DD_short-name/`:
 
-```
+```text
 problem-intake  →  00-problem-brief.md      (goal + acceptance criteria + assumptions)
 spike-doc       →  01-spike.md              (current behavior, root cause, approach)
 task-impl-doc   →  02-implementation-plan.md (subtask table with verify commands)
@@ -34,9 +35,27 @@ The `goal-loop` skill drives iteration autonomously: it diagnoses each failure b
 
 For tasks with many subtasks or overnight runs, the `ralph-loop` skill applies the Ralph pattern (fresh context every iteration, filesystem + git as the only memory): each iteration runs in a fresh-context subagent that reads the brief/plan/progress files, completes exactly one subtask, verifies it, updates the files, and returns a one-line result. The orchestrator only checks exit criteria between iterations. It refuses to start without machine-verifiable acceptance criteria — subjective goals fail this pattern.
 
+### Role hierarchy and model routing
+
+The main chat model is the orchestrator; a `project-manager` subagent coordinates role agents for multi-workstream tasks, like a PM managing a team:
+
+```text
+you → orchestrator (main chat)
+        └─ project-manager (inherit) — decomposes, dispatches, tracks status
+             ├─ engineer (balanced tier)      — one implementation subtask per dispatch
+             ├─ qa (balanced tier)            — failing tests for bugs, red-green for features
+             ├─ uiux-reviewer (vision, RO)    — screenshot vs. goal/design-system verification
+             ├─ codebase-explorer (fast tier) — search fan-out, graph-first
+             ├─ planner (deep tier, RO)       — spikes and plans
+             ├─ verifier (inherit, RO)        — independent PR-ready verdict
+             └─ security-auditor (RO)         — touched-scope audit
+```
+
+`rules/model-routing.mdc` makes this token-aware and provider-agnostic: deep-reasoning models only for planning and hard diagnosis, balanced models for implementation and tests, fast models for bulk fan-out, the cheapest capable model for grading. Two structural rules: maker ≠ grader (the model that produced work never judges it — an independent verifier sees only the artifact and the rubric), and escalate one tier only after 2 consecutive failures.
+
 ### Learning loop (self-improvement)
 
-After every non-trivial task the agent closes the loop instead of losing knowledge with the chat: one-line lessons go to `.learnings/LEARNINGS.md`; a procedure done twice gets promoted into a skill (and a skill that misled the agent gets fixed on the spot); durable cross-project facts go to a memory MCP server when one is available; and at task start the agent checks `.learnings/`, past task folders, and memory before re-deriving anything.
+The system compounds run over run — the model is stateless, the environment isn't. Project memory lives in `.learnings/STATE.md` with five sections mirroring the fail → investigate → verify → distill → consult progression: Verified facts, General rules, Open failures, Lessons learned, Last session. Every non-trivial session reads it at start and writes it before ending; entries promote upward (failure → verified fact → general rule). Beyond the state file: a procedure done twice becomes a skill (and skills accumulate known failure modes and anti-patterns after real incidents), rules that apply to most tasks go to AGENTS.md, and durable cross-project facts go to a memory MCP server.
 
 ### Graph-first code understanding (token efficiency)
 
@@ -55,7 +74,7 @@ Before a non-trivial task, the agent checks outcome, scope, constraints, and irr
 Implemented as skills with `disable-model-invocation: true` (the `.cursor/commands` mechanism is deprecated):
 
 | Command | Effect |
-|---|---|
+| --- | --- |
 | `/intake <ticket or idea>` | Produce the problem brief + acceptance criteria, then stop for review |
 | `/clarify` | Interrogate the current task for ambiguity before any work starts |
 | `/ship` | Regression check + independent verify + security audit + PR summary |
@@ -66,7 +85,7 @@ Implemented as skills with `disable-model-invocation: true` (the `.cursor/comman
 
 ## Typical session
 
-```
+```text
 /intake  <paste ticket, bug report, or one-line idea>
    → review the brief, answer any batched questions
 "loop"
