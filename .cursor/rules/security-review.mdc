@@ -10,3 +10,4 @@ alwaysApply: false
 - Check the project's own rules/AGENTS.md for domain-specific invariants (e.g. PHI never logged in plaintext, drafts never server-visible) and treat violations as critical.
 - Classify findings by severity (critical/high/medium/low) and prefer the least disruptive safe fix.
 - Record the outcome in the task folder as `05-security-review.md`, even if the result is "no findings".
+- Treat agent transcripts, traces, and task-folder docs as sensitive logs: never copy secrets, tokens, PHI, or personal data into chat, progress logs, learnings, or any `docs/agent-tasks/` artifact — reference where the data lives instead.

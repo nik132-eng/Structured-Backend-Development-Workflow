@@ -9,8 +9,8 @@ A reusable, autonomous Cursor agent configuration. Everything lives under `.curs
 | `rules/orchestrator-core.mdc` | Always-on operating protocol: triage (trivial vs. non-trivial), clarify-first questioning, delegation, approval gates |
 | `rules/git-workflow.mdc` | Branch discipline: detect base branch, never implement on it, safe git operations |
 | `rules/security-review.mdc` | When and how to trigger a touched-scope security review |
-| `agents/` | Four subagents: `codebase-explorer` (fast, read-only search), `planner` (spikes + plans, never codes), `verifier` (independent PR-ready verdict), `security-auditor` (touched-scope audit) |
-| `skills/` | Six workflow skills + four slash-command skills (see below) |
+| `agents/` | Four subagents: `codebase-explorer` (fast, read-only search), `planner` (spikes + plans, never codes), `verifier` (independent PR-ready verdict), `security-auditor` (touched-scope audit, incl. leak check on task docs) |
+| `skills/` | Eight workflow skills + four slash-command skills (see below) |
 | `hooks.json` + `hooks/guard-destructive.sh` | Safety hook: flags destructive shell commands (`rm -rf`, force push, hard reset, `DROP TABLE`, `terraform destroy`, …) for explicit approval before they run |
 | `permissions.json` | Plain-English Auto-review policy: auto-allow read-only/test/lint/build commands, force approval for pushes to shared branches, credential use, and data-destructive operations |
 
@@ -28,7 +28,15 @@ security-auditor→  05-security-review.md     (only if trust boundaries were to
 pr-prep         →  06-pr-summary.md          (stops for your approval before any PR)
 ```
 
-The `goal-loop` skill drives iteration autonomously: it diagnoses each failure before retrying, refuses to repeat the same failed hypothesis, and hard-stops after 3 identical failures or 10 iterations rather than thrashing.
+The `goal-loop` skill drives iteration autonomously: it diagnoses each failure before retrying, refuses to repeat the same failed hypothesis, and hard-stops after 3 identical failures or 10 iterations rather than thrashing. Acceptance criteria must be machine-verifiable — a command that passes or fails — and the task folder is the loop's durable memory: a fresh agent must be able to resume from the files alone, never from chat history.
+
+### Long-horizon work: the Ralph loop
+
+For tasks with many subtasks or overnight runs, the `ralph-loop` skill applies the Ralph pattern (fresh context every iteration, filesystem + git as the only memory): each iteration runs in a fresh-context subagent that reads the brief/plan/progress files, completes exactly one subtask, verifies it, updates the files, and returns a one-line result. The orchestrator only checks exit criteria between iterations. It refuses to start without machine-verifiable acceptance criteria — subjective goals fail this pattern.
+
+### AGENTS.md authoring
+
+The `agents-md` skill encodes the evidence-based "Toolchain First" practice (ETH Zurich, Feb 2026: LLM-generated context files *reduced* agent success in 5 of 8 settings and added 20%+ cost): keep AGENTS.md under ~40 lines of genuinely non-obvious content — exact commands, invariants no linter enforces, files never to touch — and delete anything the toolchain or README already covers.
 
 ### Clarify-first
 
@@ -45,6 +53,8 @@ Implemented as skills with `disable-model-invocation: true` (the `.cursor/comman
 | `/ship` | Regression check + independent verify + security audit + PR summary |
 | `/status` | Report task progress from the plan and progress log |
 | "loop" / `/goal-loop` | Run the full autonomous loop |
+| "ralph" / `/ralph-loop` | Long-horizon loop with a fresh-context subagent per iteration |
+| `/agents-md` | Author or trim an AGENTS.md the Toolchain First way |
 
 ## Typical session
 

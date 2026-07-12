@@ -14,6 +14,8 @@ Run the whole loop in one turn. Do not stop between iterations to ask "shall I c
 3. If non-trivial (more than one file, new behavior, UI, security, or unclear requirements): run the `planner` subagent → `01-spike.md` and `02-implementation-plan.md` (see `spike-doc` and `task-implementation-doc` skills).
 4. Git: check `git status`; confirm with user if the tree is dirty. Find the base branch (project rules, or `git remote show origin` HEAD). Branch as `cursor/<ticket-or-feature>/<short-slug>`. Never implement directly on the base branch.
 5. Create `03-progress-log.md` with the iteration table (template below).
+6. **Durable state rule**: the task folder is the loop's memory, not the chat. Keep `02-implementation-plan.md` statuses and `03-progress-log.md` current enough that a fresh agent with zero chat history could resume from the files alone.
+7. If the plan has more than ~8 subtasks or the run is expected to outlast one context window (overnight work), switch to the `ralph-loop` skill: same artifacts, but each iteration runs in a fresh-context subagent.
 
 ## Iteration protocol
 

@@ -12,7 +12,7 @@ Include only:
 - **Source**: links or "chat" — never copy long source text, summarize it
 - **Problem**: the exact reported problem, 1–3 sentences
 - **Goal**: business outcome in one line
-- **Acceptance criteria**: checkbox list; each must be verifiable by a test, lint, build, or observable behavior — these are the goal-loop exit test
+- **Acceptance criteria**: checkbox list; each must be machine-verifiable — a command that passes or fails (test, lint, typecheck, build) or a concrete observable behavior. Rewrite subjective criteria ("clean", "fast", "better") into observable checks before accepting them — these are the goal-loop exit test
 - **Assumptions**: one line each, so the user can veto them
 - **Constraints / non-goals**
 - **Affected area**: modules or paths, best guess is fine
